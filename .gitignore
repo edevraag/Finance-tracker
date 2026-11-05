@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Production builds
+dist/
+*/dist/
+build/
+*/build/
+
+# Environment files
+.env
+.env.*
+*.env
+*/.env
+*/.env.*
+!.env.example
+!*/.env.example
+
+# Logs
+*.log
+logs/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Agent skills cache
+.agents/
+*/.agents/
+.claude/
+*/.claude/
+.windsurf/
+*/.windsurf/
+skills-lock.json
+*/skills-lock.json

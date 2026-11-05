@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  categories   Category[]
+  transactions Transaction[]
+  budgets      Budget[]
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  userId       String
+  name         String
+  color        String        @default("#10b981")
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@unique([userId, name])
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  userId     String
+  categoryId String
+  type       String   // "INCOME" | "EXPENSE"
+  amount     Float
+  date       DateTime
+  note       String?
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+}
+
+model Budget {
+  id          String   @id @default(uuid())
+  userId      String
+  categoryId  String
+  month       String   // Format: "YYYY-MM"
+  limitAmount Float
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId, month])
+}
